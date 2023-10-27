@@ -68,11 +68,6 @@ classDiagram
   LocationType "1" -- "1..*" UserLocation
   
 ```
-
-### 🌍 Countries States Cities Database Integration **API**
-- Reference: [API Documentation](https://countrystatecity.in/)
-- Demo : https://dr5hn.github.io/countries-states-cities-database/
-
 ## Development
 
 Before you can build this project, you must install and configure the following dependencies on your machine:
@@ -115,3 +110,9 @@ To launch your application's tests, run:
 In ClientApp folder run :
 
     npm test
+
+### Tools and Others
+#### 🌍 Countries States Cities Database Integration **API**
+- Reference: [API Documentation](https://countrystatecity.in/)
+- Demo : https://dr5hn.github.io/countries-states-cities-database/
+- https://www.mockaroo.com/
