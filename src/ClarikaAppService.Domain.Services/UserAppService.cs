@@ -3,6 +3,7 @@ using JHipsterNet.Core.Pagination;
 using ClarikaAppService.Domain.Entities;
 using ClarikaAppService.Domain.Services.Interfaces;
 using ClarikaAppService.Domain.Repositories.Interfaces;
+using ClarikaAppService.Infrastructure.Data.Repositories;
 
 namespace ClarikaAppService.Domain.Services;
 
@@ -24,10 +25,12 @@ public class UserAppService : IUserAppService
 
     public virtual async Task<IPage<UserApp>> FindAll(IPageable pageable)
     {
-        var page = await _userAppRepository.QueryHelper()
-            .Include(userApp => userApp.Country)
-            .GetPageAsync(pageable);
-        return page;
+        return await _userAppRepository.GetPageAsync(pageable);
+
+        //var page = await _userAppRepository.QueryHelper()
+        //    .Include(userApp => userApp.Country)
+        //    .GetPageAsync(pageable);
+        //return page;
     }
 
     public virtual async Task<UserApp> FindOne(long id)
