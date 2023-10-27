@@ -1,0 +1,25 @@
+{
+  "clarikaAppServiceApp": {
+    "locationType": {
+      "home": {
+        "title": "Location Types",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Location Type",
+        "createOrEditLabel": "Crear o editar Location Type",
+        "notFound": "Ningún Location Types encontrado"
+      },
+      "created": "Un nuevo Location Type ha sido creado con el identificador {{ param }}",
+      "updated": "Un Location Type ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Location Type ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Location Type {{ id }}?"
+      },
+      "detail": {
+        "title": "Location Type"
+      },
+      "id": "ID",
+      "name": "Name",
+      "userLocation": "User Location"
+    }
+  }
+}

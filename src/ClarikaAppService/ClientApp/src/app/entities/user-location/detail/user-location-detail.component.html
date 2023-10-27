@@ -1,0 +1,112 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="userLocation">
+      <h2 data-cy="userLocationDetailsHeading">
+        <span jhiTranslate="clarikaAppServiceApp.userLocation.detail.title"
+          >User Location</span
+        >
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ userLocation.id }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="clarikaAppServiceApp.userLocation.address"
+            >Address</span
+          >
+        </dt>
+        <dd>
+          <span>{{ userLocation.address }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="clarikaAppServiceApp.userLocation.zipCode"
+            >Zip Code</span
+          >
+        </dt>
+        <dd>
+          <span>{{ userLocation.zipCode }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="clarikaAppServiceApp.userLocation.province"
+            >Province</span
+          >
+        </dt>
+        <dd>
+          <span>{{ userLocation.province }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="clarikaAppServiceApp.userLocation.country"
+            >Country</span
+          >
+        </dt>
+        <dd>
+          <div *ngIf="userLocation.country">
+            <a [routerLink]="['/country', userLocation.country?.id, 'view']">{{
+              userLocation.country?.id
+            }}</a>
+          </div>
+        </dd>
+        <dt>
+          <span jhiTranslate="clarikaAppServiceApp.userLocation.locationType"
+            >Location Type</span
+          >
+        </dt>
+        <dd>
+          <div *ngIf="userLocation.locationType">
+            <a
+              [routerLink]="[
+                '/location-type',
+                userLocation.locationType?.id,
+                'view'
+              ]"
+              >{{ userLocation.locationType?.id }}</a
+            >
+          </div>
+        </dd>
+        <dt>
+          <span jhiTranslate="clarikaAppServiceApp.userLocation.userApp"
+            >User App</span
+          >
+        </dt>
+        <dd>
+          <div *ngIf="userLocation.userApp">
+            <a [routerLink]="['/user-app', userLocation.userApp?.id, 'view']">{{
+              userLocation.userApp?.id
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button
+        type="submit"
+        (click)="previousState()"
+        class="btn btn-info"
+        data-cy="entityDetailsBackButton"
+      >
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span
+          jhiTranslate="entity.action.back"
+          >Back</span
+        >
+      </button>
+
+      <button
+        type="button"
+        [routerLink]="['/user-location', userLocation.id, 'edit']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span
+          jhiTranslate="entity.action.edit"
+          >Edit</span
+        >
+      </button>
+    </div>
+  </div>
+</div>

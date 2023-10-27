@@ -1,0 +1,45 @@
+entity UserApp {
+    firstName String required 
+    lastName String required
+	email String 
+    dateBirth LocalDate
+    age Integer min(0) max(150)
+    passwordHash String
+    securityStamp String
+    concurrencyStamp String
+}
+
+entity Country {
+	name String required
+}
+
+entity State{
+	name String required
+} 
+
+entity City{
+	name String required
+}
+
+entity LocationType{
+	name String required
+}
+
+entity UserLocation {
+	address String required
+    zipCode String
+	province String
+}
+
+relationship OneToMany {
+    Country to State{country}
+    State to City{state}
+    Country to UserLocation{country}
+    LocationType to UserLocation{locationType}
+    UserApp to UserLocation{userApp}
+    Country to UserApp{country}
+}
+
+dto * with mapstruct
+service all with serviceImpl
+paginate all with pagination

@@ -1,0 +1,33 @@
+{
+  "clarikaAppServiceApp": {
+    "userApp": {
+      "home": {
+        "title": "User Apps",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo User App",
+        "createOrEditLabel": "Crear o editar User App",
+        "notFound": "Ningún User Apps encontrado"
+      },
+      "created": "Un nuevo User App ha sido creado con el identificador {{ param }}",
+      "updated": "Un User App ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un User App ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar User App {{ id }}?"
+      },
+      "detail": {
+        "title": "User App"
+      },
+      "id": "ID",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "dateBirth": "Date Birth",
+      "age": "Age",
+      "passwordHash": "Password Hash",
+      "securityStamp": "Security Stamp",
+      "concurrencyStamp": "Concurrency Stamp",
+      "userLocation": "User Location",
+      "country": "Country"
+    }
+  }
+}

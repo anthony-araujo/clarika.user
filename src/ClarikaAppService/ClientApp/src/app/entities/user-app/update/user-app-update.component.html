@@ -1,0 +1,307 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form
+      name="editForm"
+      role="form"
+      novalidate
+      (ngSubmit)="save()"
+      [formGroup]="editForm"
+    >
+      <h2
+        id="jhi-user-app-heading"
+        data-cy="UserAppCreateUpdateHeading"
+        jhiTranslate="clarikaAppServiceApp.userApp.home.createOrEditLabel"
+      >
+        Create or edit a User App
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" [hidden]="editForm.get('id')!.value == null">
+          <label
+            class="form-label"
+            jhiTranslate="global.field.id"
+            for="field_id"
+            >ID</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="id"
+            id="field_id"
+            data-cy="id"
+            formControlName="id"
+            [readonly]="true"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label
+            class="form-label"
+            jhiTranslate="clarikaAppServiceApp.userApp.firstName"
+            for="field_firstName"
+            >First Name</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="firstName"
+            id="field_firstName"
+            data-cy="firstName"
+            formControlName="firstName"
+          />
+          <div
+            *ngIf="
+              editForm.get('firstName')!.invalid &&
+              (editForm.get('firstName')!.dirty ||
+                editForm.get('firstName')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('firstName')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label
+            class="form-label"
+            jhiTranslate="clarikaAppServiceApp.userApp.lastName"
+            for="field_lastName"
+            >Last Name</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="lastName"
+            id="field_lastName"
+            data-cy="lastName"
+            formControlName="lastName"
+          />
+          <div
+            *ngIf="
+              editForm.get('lastName')!.invalid &&
+              (editForm.get('lastName')!.dirty ||
+                editForm.get('lastName')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('lastName')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              This field is required.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label
+            class="form-label"
+            jhiTranslate="clarikaAppServiceApp.userApp.email"
+            for="field_email"
+            >Email</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="email"
+            id="field_email"
+            data-cy="email"
+            formControlName="email"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label
+            class="form-label"
+            jhiTranslate="clarikaAppServiceApp.userApp.dateBirth"
+            for="field_dateBirth"
+            >Date Birth</label
+          >
+          <div class="input-group">
+            <input
+              id="field_dateBirth"
+              data-cy="dateBirth"
+              type="text"
+              class="form-control"
+              name="dateBirth"
+              ngbDatepicker
+              #dateBirthDp="ngbDatepicker"
+              formControlName="dateBirth"
+            />
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="dateBirthDp.toggle()"
+            >
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label
+            class="form-label"
+            jhiTranslate="clarikaAppServiceApp.userApp.age"
+            for="field_age"
+            >Age</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="age"
+            id="field_age"
+            data-cy="age"
+            formControlName="age"
+          />
+          <div
+            *ngIf="
+              editForm.get('age')!.invalid &&
+              (editForm.get('age')!.dirty || editForm.get('age')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('age')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 0 }"
+            >
+              This field should be at least 0.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('age')?.errors?.max"
+              jhiTranslate="entity.validation.max"
+              [translateValues]="{ max: 150 }"
+            >
+              This field cannot be more than 150.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('age')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label
+            class="form-label"
+            jhiTranslate="clarikaAppServiceApp.userApp.passwordHash"
+            for="field_passwordHash"
+            >Password Hash</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="passwordHash"
+            id="field_passwordHash"
+            data-cy="passwordHash"
+            formControlName="passwordHash"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label
+            class="form-label"
+            jhiTranslate="clarikaAppServiceApp.userApp.securityStamp"
+            for="field_securityStamp"
+            >Security Stamp</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="securityStamp"
+            id="field_securityStamp"
+            data-cy="securityStamp"
+            formControlName="securityStamp"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label
+            class="form-label"
+            jhiTranslate="clarikaAppServiceApp.userApp.concurrencyStamp"
+            for="field_concurrencyStamp"
+            >Concurrency Stamp</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="concurrencyStamp"
+            id="field_concurrencyStamp"
+            data-cy="concurrencyStamp"
+            formControlName="concurrencyStamp"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label
+            class="form-label"
+            jhiTranslate="clarikaAppServiceApp.userApp.country"
+            for="field_country"
+            >Country</label
+          >
+          <select
+            class="form-control"
+            id="field_country"
+            data-cy="country"
+            name="country"
+            formControlName="country"
+          >
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="
+                countryOption.id === editForm.get('country')!.value?.id
+                  ? editForm.get('country')!.value
+                  : countryOption
+              "
+              *ngFor="
+                let countryOption of countriesSharedCollection;
+                trackBy: trackCountryById
+              "
+            >
+              {{ countryOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button
+          type="button"
+          id="cancel-save"
+          data-cy="entityCreateCancelButton"
+          class="btn btn-secondary"
+          (click)="previousState()"
+        >
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span
+            jhiTranslate="entity.action.cancel"
+            >Cancel</span
+          >
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span
+            jhiTranslate="entity.action.save"
+            >Save</span
+          >
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

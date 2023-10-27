@@ -1,0 +1,29 @@
+{
+  "clarikaAppServiceApp": {
+    "userLocation": {
+      "home": {
+        "title": "User Locations",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo User Location",
+        "createOrEditLabel": "Crear o editar User Location",
+        "notFound": "Ningún User Locations encontrado"
+      },
+      "created": "Un nuevo User Location ha sido creado con el identificador {{ param }}",
+      "updated": "Un User Location ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un User Location ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar User Location {{ id }}?"
+      },
+      "detail": {
+        "title": "User Location"
+      },
+      "id": "ID",
+      "address": "Address",
+      "zipCode": "Zip Code",
+      "province": "Province",
+      "country": "Country",
+      "locationType": "Location Type",
+      "userApp": "User App"
+    }
+  }
+}

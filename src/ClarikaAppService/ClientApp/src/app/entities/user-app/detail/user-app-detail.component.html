@@ -1,0 +1,119 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="userApp">
+      <h2 data-cy="userAppDetailsHeading">
+        <span jhiTranslate="clarikaAppServiceApp.userApp.detail.title"
+          >User App</span
+        >
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ userApp.id }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="clarikaAppServiceApp.userApp.firstName"
+            >First Name</span
+          >
+        </dt>
+        <dd>
+          <span>{{ userApp.firstName }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="clarikaAppServiceApp.userApp.lastName"
+            >Last Name</span
+          >
+        </dt>
+        <dd>
+          <span>{{ userApp.lastName }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="clarikaAppServiceApp.userApp.email">Email</span>
+        </dt>
+        <dd>
+          <span>{{ userApp.email }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="clarikaAppServiceApp.userApp.dateBirth"
+            >Date Birth</span
+          >
+        </dt>
+        <dd>
+          <span>{{ userApp.dateBirth | formatMediumDate }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="clarikaAppServiceApp.userApp.age">Age</span>
+        </dt>
+        <dd>
+          <span>{{ userApp.age }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="clarikaAppServiceApp.userApp.passwordHash"
+            >Password Hash</span
+          >
+        </dt>
+        <dd>
+          <span>{{ userApp.passwordHash }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="clarikaAppServiceApp.userApp.securityStamp"
+            >Security Stamp</span
+          >
+        </dt>
+        <dd>
+          <span>{{ userApp.securityStamp }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="clarikaAppServiceApp.userApp.concurrencyStamp"
+            >Concurrency Stamp</span
+          >
+        </dt>
+        <dd>
+          <span>{{ userApp.concurrencyStamp }}</span>
+        </dd>
+        <dt>
+          <span jhiTranslate="clarikaAppServiceApp.userApp.country"
+            >Country</span
+          >
+        </dt>
+        <dd>
+          <div *ngIf="userApp.country">
+            <a [routerLink]="['/country', userApp.country?.id, 'view']">{{
+              userApp.country?.id
+            }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button
+        type="submit"
+        (click)="previousState()"
+        class="btn btn-info"
+        data-cy="entityDetailsBackButton"
+      >
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span
+          jhiTranslate="entity.action.back"
+          >Back</span
+        >
+      </button>
+
+      <button
+        type="button"
+        [routerLink]="['/user-app', userApp.id, 'edit']"
+        class="btn btn-primary"
+      >
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span
+          jhiTranslate="entity.action.edit"
+          >Edit</span
+        >
+      </button>
+    </div>
+  </div>
+</div>

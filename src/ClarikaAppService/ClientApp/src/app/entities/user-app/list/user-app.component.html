@@ -1,0 +1,174 @@
+<div>
+  <h2 id="page-heading" data-cy="UserAppHeading">
+    <span jhiTranslate="clarikaAppServiceApp.userApp.home.title"
+      >User Apps</span
+    >
+
+    <div class="d-flex justify-content-end">
+      <button
+        class="btn btn-info me-2"
+        (click)="loadAll()"
+        [disabled]="isLoading"
+      >
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="clarikaAppServiceApp.userApp.home.refreshListLabel"
+          >Refresh List</span
+        >
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-user-app"
+        [routerLink]="['/user-app/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="clarikaAppServiceApp.userApp.home.createLabel">
+          Create a new User App
+        </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div
+    class="alert alert-warning"
+    id="no-result"
+    *ngIf="userApps?.length === 0"
+  >
+    <span jhiTranslate="clarikaAppServiceApp.userApp.home.notFound"
+      >No userApps found</span
+    >
+  </div>
+
+  <div
+    class="table-responsive"
+    id="entities"
+    *ngIf="userApps && userApps.length > 0"
+  >
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col">
+            <span jhiTranslate="clarikaAppServiceApp.userApp.firstName"
+              >First Name</span
+            >
+          </th>
+          <th scope="col">
+            <span jhiTranslate="clarikaAppServiceApp.userApp.lastName"
+              >Last Name</span
+            >
+          </th>
+          <th scope="col">
+            <span jhiTranslate="clarikaAppServiceApp.userApp.email">Email</span>
+          </th>
+          <th scope="col">
+            <span jhiTranslate="clarikaAppServiceApp.userApp.dateBirth"
+              >Date Birth</span
+            >
+          </th>
+          <th scope="col">
+            <span jhiTranslate="clarikaAppServiceApp.userApp.age">Age</span>
+          </th>
+          <th scope="col">
+            <span jhiTranslate="clarikaAppServiceApp.userApp.passwordHash"
+              >Password Hash</span
+            >
+          </th>
+          <th scope="col">
+            <span jhiTranslate="clarikaAppServiceApp.userApp.securityStamp"
+              >Security Stamp</span
+            >
+          </th>
+          <th scope="col">
+            <span jhiTranslate="clarikaAppServiceApp.userApp.concurrencyStamp"
+              >Concurrency Stamp</span
+            >
+          </th>
+          <th scope="col">
+            <span jhiTranslate="clarikaAppServiceApp.userApp.country"
+              >Country</span
+            >
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let userApp of userApps; trackBy: trackId"
+          data-cy="entityTable"
+        >
+          <td>
+            <a [routerLink]="['/user-app', userApp.id, 'view']">{{
+              userApp.id
+            }}</a>
+          </td>
+          <td>{{ userApp.firstName }}</td>
+          <td>{{ userApp.lastName }}</td>
+          <td>{{ userApp.email }}</td>
+          <td>{{ userApp.dateBirth | formatMediumDate }}</td>
+          <td>{{ userApp.age }}</td>
+          <td>{{ userApp.passwordHash }}</td>
+          <td>{{ userApp.securityStamp }}</td>
+          <td>{{ userApp.concurrencyStamp }}</td>
+          <td>
+            <div *ngIf="userApp.country">
+              <a [routerLink]="['/country', userApp.country?.id, 'view']">{{
+                userApp.country?.id
+              }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/user-app', userApp.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span
+                  class="d-none d-md-inline"
+                  jhiTranslate="entity.action.view"
+                  >View</span
+                >
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/user-app', userApp.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span
+                  class="d-none d-md-inline"
+                  jhiTranslate="entity.action.edit"
+                  >Edit</span
+                >
+              </button>
+
+              <button
+                type="submit"
+                (click)="delete(userApp)"
+                class="btn btn-danger btn-sm"
+                data-cy="entityDeleteButton"
+              >
+                <fa-icon icon="times"></fa-icon>
+                <span
+                  class="d-none d-md-inline"
+                  jhiTranslate="entity.action.delete"
+                  >Delete</span
+                >
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
