@@ -9,121 +9,125 @@ using JHipsterNet.Core.Pagination.Extensions;
 using ClarikaAppService.Domain.Entities;
 using ClarikaAppService.Domain.Repositories.Interfaces;
 using System.Data;
+using Dapper;
 
-namespace ClarikaAppService.Infrastructure.Data.Repositories;
-
-public abstract class GenericRepository<TEntity, TKey> : ReadOnlyGenericRepository<TEntity, TKey>, IGenericRepository<TEntity, TKey>, IDisposable where TEntity : BaseEntity<TKey>
+namespace ClarikaAppService.Infrastructure.Data.Repositories
 {
-    protected GenericRepository(IDbConnection dbConnection) : base(dbConnection)
+    public abstract class GenericRepository<TEntity, TKey> : ReadOnlyGenericRepository<TEntity, TKey>, IGenericRepository<TEntity, TKey>, IDisposable where TEntity : BaseEntity<TKey>
     {
-    }
+        protected IDbConnection _dbConnection;
 
-    //public GenericRepository(IUnitOfWork context) : base(context)
-    //{
-    //}
-
-    public virtual TEntity Add(TEntity entity)
-    {
-        //_dbSet.Add(entity);
-        return entity;
-
-    }
-
-    public virtual bool AddRange(params TEntity[] entities)
-    {
-        //_dbSet.AddRange(entities);
-        return true;
-    }
-
-    public virtual TEntity Attach(TEntity entity)
-    {
-        //var entry = _dbSet.Attach(entity);
-        //entry.State = EntityState.Added;
-        return entity;
-    }
-
-    public virtual TEntity Update(TEntity entity)
-    {
-        //_dbSet.Update(entity);
-        return entity;
-    }
-
-    public virtual TEntity Update(string id, TEntity entity)
-    {
-        //_dbSet.Update(entity);
-        return entity;
-    }
-
-    public virtual bool UpdateRange(params TEntity[] entities)
-    {
-        //_dbSet.UpdateRange(entities);
-        return true;
-    }
-
-    public async virtual Task<TEntity> CreateOrUpdateAsync(TEntity entity)
-    {
-        bool exists = await Exists(entity);
-        if (entity.Id.Equals(0) && exists)
+        protected GenericRepository(IDbConnection dbConnection) : base(dbConnection)
         {
-            Update(entity);
+            _dbConnection = dbConnection;
         }
-        else
+
+        public virtual TEntity Add(TEntity entity)
         {
-            //_context.AddOrUpdateGraph(entity);
+            // Dapper: You don't need to add entities in Dapper explicitly.
+            return entity;
         }
-        return entity;
-    }
 
-    public async virtual Task<TEntity> CreateOrUpdateAsync(TEntity entity, ICollection<Type> entitiesToBeUpdated)
-    {
-        bool exists = await Exists(entity);
-        if (entity.Id.Equals(0) && exists)
+        public virtual bool AddRange(params TEntity[] entities)
         {
-            Update(entity);
+            // Dapper: You don't need to add entities in Dapper explicitly.
+            return true;
         }
-        else
+
+        public virtual TEntity Attach(TEntity entity)
         {
-            //_context.AddOrUpdateGraph(entity, entitiesToBeUpdated);
+            // Dapper: Dapper doesn't use explicit entity state management.
+            return entity;
         }
-        return entity;
-    }
 
-    public virtual async Task Clear()
-    {
-        //var allEntities = await _dbSet.ToListAsync();
-        //_dbSet.RemoveRange(allEntities);
-    }
+        public virtual TEntity Update(TEntity entity)
+        {
+            // Dapper: Use Dapper's Update method to update the entity.
+            var updateSql = $"UPDATE {typeof(TEntity).Name} SET /* specify the update fields and parameters */ WHERE Id = @Id";
+            _dbConnection.Execute(updateSql, entity);
+            return entity;
+        }
 
-    public virtual async Task DeleteByIdAsync(TKey id)
-    {
-        //var entity = await GetOneAsync(id);
-        //_dbSet.Remove(entity);
-    }
+        public virtual TEntity Update(string id, TEntity entity)
+        {
+            // Dapper: Use Dapper's Update method to update the entity.
+            var updateSql = $"UPDATE {typeof(TEntity).Name} SET /* specify the update fields and parameters */ WHERE Id = @Id";
+            _dbConnection.Execute(updateSql, entity);
+            return entity;
+        }
 
-    public virtual async Task DeleteAsync(TEntity entity)
-    {
+        public virtual bool UpdateRange(params TEntity[] entities)
+        {
+            // Dapper: Use Dapper's Update method for each entity in the range.
+            foreach (var entity in entities)
+            {
+                Update(entity);
+            }
+            return true;
+        }
 
-        //await Task.FromResult(_dbSet.Remove(entity));
-    }
+        public async virtual Task<TEntity> CreateOrUpdateAsync(TEntity entity)
+        {
+            bool exists = await Exists(entity);
+            if (entity.Id.Equals(0) && exists)
+            {
+                Update(entity);
+            }
+            else
+            {
+                // Perform an insert operation using Dapper
+                var insertSql = $"INSERT INTO {typeof(TEntity).Name} (/* specify columns */) VALUES (/* specify values */); SELECT SCOPE_IDENTITY()";
+                entity.Id = await _dbConnection.ExecuteScalarAsync<TKey>(insertSql, entity);
+            }
+            return entity;
+        }
 
-    public virtual async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
-    {
-        return await SaveChangesAsync(cancellationToken);
-        //return await _context.SaveChangesAsync(cancellationToken);
-    }
+        public async virtual Task<TEntity> CreateOrUpdateAsync(TEntity entity, ICollection<Type> entitiesToBeUpdated)
+        {
+            // Dapper: Handle updates for entities explicitly
+            bool exists = await Exists(entity);
+            if (entity.Id.Equals(0) && exists)
+            {
+                Update(entity);
+            }
+            else
+            {
+                // Perform an insert operation using Dapper
+                var insertSql = $"INSERT INTO {typeof(TEntity).Name} (/* specify columns */) VALUES (/* specify values */); SELECT SCOPE_IDENTITY()";
+                entity.Id = await _dbConnection.ExecuteScalarAsync<TKey>(insertSql, entity);
+            }
+            return entity;
+        }
 
-    protected async Task RemoveManyToManyRelationship(string joinEntityName, string ownerIdKey, string ownedIdKey, long ownerEntityId, List<long> idsToIgnore)
-    {
-        //DbSet<Dictionary<string, object>> dbset = _context.Set<Dictionary<string, object>>(joinEntityName);
+        public virtual async Task Clear()
+        {
+            // Dapper: Dapper doesn't require removing all entities explicitly.
+        }
 
-        //var manyToManyData = await dbset
-        //    .Where(joinPropertyBag => joinPropertyBag[ownerIdKey].Equals(ownerEntityId))
-        //    .ToListAsync();
+        public virtual async Task DeleteByIdAsync(TKey id)
+        {
+            // Dapper: Use Dapper to delete the entity by ID.
+            var deleteSql = $"DELETE FROM {typeof(TEntity).Name} WHERE Id = @Id";
+            _dbConnection.Execute(deleteSql, new { Id = id });
+        }
 
-        //var filteredManyToManyData = manyToManyData
-        //    .Where(joinPropertyBag => !idsToIgnore.Any(idToIgnore => joinPropertyBag[ownedIdKey].Equals(idToIgnore)))
-        //    .ToList();
+        public virtual async Task DeleteAsync(TEntity entity)
+        {
+            // Dapper: Use Dapper to delete the entity by ID.
+            DeleteByIdAsync(entity.Id);
+        }
 
-        //dbset.RemoveRange(filteredManyToManyData);
+        public virtual async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Dapper: Dapper doesn't require explicit SaveChangesAsync.
+            return 0;
+        }
+
+        protected async Task RemoveManyToManyRelationship(string joinEntityName, string ownerIdKey, string ownedIdKey, long ownerEntityId, List<long> idsToIgnore)
+        {
+            // Dapper: Remove many-to-many relationships using DELETE statements.
+            var deleteSql = $"DELETE FROM {joinEntityName} WHERE {ownerIdKey} = @OwnerEntityId AND {ownedIdKey} NOT IN @IdsToIgnore";
+            _dbConnection.Execute(deleteSql, new { OwnerEntityId = ownerEntityId, IdsToIgnore = idsToIgnore });
+        }
     }
 }

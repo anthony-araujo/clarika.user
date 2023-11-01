@@ -148,53 +148,6 @@
         <div class="row mb-3">
           <label
             class="form-label"
-            jhiTranslate="clarikaAppServiceApp.userApp.age"
-            for="field_age"
-            >Age</label
-          >
-          <input
-            type="number"
-            class="form-control"
-            name="age"
-            id="field_age"
-            data-cy="age"
-            formControlName="age"
-          />
-          <div
-            *ngIf="
-              editForm.get('age')!.invalid &&
-              (editForm.get('age')!.dirty || editForm.get('age')!.touched)
-            "
-          >
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('age')?.errors?.min"
-              jhiTranslate="entity.validation.min"
-              [translateValues]="{ min: 0 }"
-            >
-              This field should be at least 0.
-            </small>
-            <small
-              class="form-text text-danger"
-              *ngIf="editForm.get('age')?.errors?.max"
-              jhiTranslate="entity.validation.max"
-              [translateValues]="{ max: 150 }"
-            >
-              This field cannot be more than 150.
-            </small>
-            <small
-              class="form-text text-danger"
-              [hidden]="!editForm.get('age')?.errors?.number"
-              jhiTranslate="entity.validation.number"
-            >
-              This field should be a number.
-            </small>
-          </div>
-        </div>
-
-        <div class="row mb-3">
-          <label
-            class="form-label"
             jhiTranslate="clarikaAppServiceApp.userApp.passwordHash"
             for="field_passwordHash"
             >Password Hash</label

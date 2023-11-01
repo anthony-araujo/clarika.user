@@ -75,21 +75,6 @@
             <span jhiTranslate="clarikaAppServiceApp.userApp.age">Age</span>
           </th>
           <th scope="col">
-            <span jhiTranslate="clarikaAppServiceApp.userApp.passwordHash"
-              >Password Hash</span
-            >
-          </th>
-          <th scope="col">
-            <span jhiTranslate="clarikaAppServiceApp.userApp.securityStamp"
-              >Security Stamp</span
-            >
-          </th>
-          <th scope="col">
-            <span jhiTranslate="clarikaAppServiceApp.userApp.concurrencyStamp"
-              >Concurrency Stamp</span
-            >
-          </th>
-          <th scope="col">
             <span jhiTranslate="clarikaAppServiceApp.userApp.country"
               >Country</span
             >
@@ -112,9 +97,6 @@
           <td>{{ userApp.email }}</td>
           <td>{{ userApp.dateBirth | formatMediumDate }}</td>
           <td>{{ userApp.age }}</td>
-          <td>{{ userApp.passwordHash }}</td>
-          <td>{{ userApp.securityStamp }}</td>
-          <td>{{ userApp.concurrencyStamp }}</td>
           <td>
             <div *ngIf="userApp.country">
               <a [routerLink]="['/country', userApp.country?.id, 'view']">{{

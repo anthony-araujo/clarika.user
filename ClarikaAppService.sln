@@ -24,6 +24,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{881A9E82-6892-4CC6-86B3-383F61DC759F}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
+		RelationshipsInterfaces.md = RelationshipsInterfaces.md
 	EndProjectSection
 EndProject
 Global
@@ -72,5 +73,8 @@ Global
 		{47111A02-B5C9-4F40-84C8-EB7F348EAE4F} = {4C9331B9-E37A-4E05-B4FC-A1A0DD2434E9}
 		{DB343B14-8B1E-406D-B33C-D1B90147DF10} = {4C9331B9-E37A-4E05-B4FC-A1A0DD2434E9}
 		{9CD2839C-1123-470A-A65D-A6F452541F5C} = {4C9331B9-E37A-4E05-B4FC-A1A0DD2434E9}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9C4599B7-84FD-4B27-AF54-858169D952AC}
 	EndGlobalSection
 EndGlobal

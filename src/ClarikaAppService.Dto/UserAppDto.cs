@@ -14,7 +14,27 @@ namespace ClarikaAppService.Dto
         public string LastName { get; set; }
         public string Email { get; set; }
         public DateTime? DateBirth { get; set; }
-        public int? Age { get; set; }
+        public int? Age
+        {
+            get
+            {
+                if (DateBirth.HasValue)
+                {
+                    // Calculate age based on DateBirth
+                    int age = DateTime.Now.Year - DateBirth.Value.Year;
+                    if (DateTime.Now.Month < DateBirth.Value.Month || (DateTime.Now.Month == DateBirth.Value.Month && DateTime.Now.Day < DateBirth.Value.Day))
+                    {
+                        age--;
+                    }
+                    return age;
+                }
+                return null;
+            }
+            set
+            {
+                // You can choose to set the Age property directly, or you can leave the setter empty.
+            }
+        }
         public string PasswordHash { get; set; }
         public string SecurityStamp { get; set; }
         public string ConcurrencyStamp { get; set; }

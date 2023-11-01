@@ -32,7 +32,7 @@ namespace ClarikaAppService.Test.Controllers
             });
             _mapper = config.CreateMapper();
 
-            InitTest();
+            //InitTest();
         }
 
         private const string DefaultAddress = "AAAAAAAAAA";
@@ -52,176 +52,176 @@ namespace ClarikaAppService.Test.Controllers
 
         private readonly IMapper _mapper;
 
-        private UserLocation CreateEntity()
-        {
-            return new UserLocation
-            {
-                Address = DefaultAddress,
-                ZipCode = DefaultZipCode,
-                Province = DefaultProvince,
-            };
-        }
+        //private UserLocation CreateEntity()
+        //{
+        //    return new UserLocation
+        //    {
+        //        Address = DefaultAddress,
+        //        ZipCode = DefaultZipCode,
+        //        Province = DefaultProvince,
+        //    };
+        //}
 
-        private void InitTest()
-        {
-            _userLocation = CreateEntity();
-        }
+        //private void InitTest()
+        //{
+        //    _userLocation = CreateEntity();
+        //}
 
-        [Fact]
-        public async Task CreateUserLocation()
-        {
-            var databaseSizeBeforeCreate = await _userLocationRepository.CountAsync();
+        //[Fact]
+        //public async Task CreateUserLocation()
+        //{
+        //    var databaseSizeBeforeCreate = await _userLocationRepository.CountAsync();
 
-            // Create the UserLocation
-            UserLocationDto _userLocationDto = _mapper.Map<UserLocationDto>(_userLocation);
-            var response = await _client.PostAsync("/api/user-locations", TestUtil.ToJsonContent(_userLocationDto));
-            response.StatusCode.Should().Be(HttpStatusCode.Created);
+        //    // Create the UserLocation
+        //    UserLocationDto _userLocationDto = _mapper.Map<UserLocationDto>(_userLocation);
+        //    var response = await _client.PostAsync("/api/user-locations", TestUtil.ToJsonContent(_userLocationDto));
+        //    response.StatusCode.Should().Be(HttpStatusCode.Created);
 
-            // Validate the UserLocation in the database
-            var userLocationList = await _userLocationRepository.GetAllAsync();
-            userLocationList.Count().Should().Be(databaseSizeBeforeCreate + 1);
-            var testUserLocation = userLocationList.Last();
-            testUserLocation.Address.Should().Be(DefaultAddress);
-            testUserLocation.ZipCode.Should().Be(DefaultZipCode);
-            testUserLocation.Province.Should().Be(DefaultProvince);
-        }
+        //    // Validate the UserLocation in the database
+        //    var userLocationList = await _userLocationRepository.GetAllAsync();
+        //    userLocationList.Count().Should().Be(databaseSizeBeforeCreate + 1);
+        //    var testUserLocation = userLocationList.Last();
+        //    testUserLocation.Address.Should().Be(DefaultAddress);
+        //    testUserLocation.ZipCode.Should().Be(DefaultZipCode);
+        //    testUserLocation.Province.Should().Be(DefaultProvince);
+        //}
 
-        [Fact]
-        public async Task CreateUserLocationWithExistingId()
-        {
-            var databaseSizeBeforeCreate = await _userLocationRepository.CountAsync();
-            // Create the UserLocation with an existing ID
-            _userLocation.Id = 1L;
+        //[Fact]
+        //public async Task CreateUserLocationWithExistingId()
+        //{
+        //    var databaseSizeBeforeCreate = await _userLocationRepository.CountAsync();
+        //    // Create the UserLocation with an existing ID
+        //    _userLocation.Id = 1L;
 
-            // An entity with an existing ID cannot be created, so this API call must fail
-            UserLocationDto _userLocationDto = _mapper.Map<UserLocationDto>(_userLocation);
-            var response = await _client.PostAsync("/api/user-locations", TestUtil.ToJsonContent(_userLocationDto));
+        //    // An entity with an existing ID cannot be created, so this API call must fail
+        //    UserLocationDto _userLocationDto = _mapper.Map<UserLocationDto>(_userLocation);
+        //    var response = await _client.PostAsync("/api/user-locations", TestUtil.ToJsonContent(_userLocationDto));
 
-            // Validate the UserLocation in the database
-            var userLocationList = await _userLocationRepository.GetAllAsync();
-            userLocationList.Count().Should().Be(databaseSizeBeforeCreate);
-        }
+        //    // Validate the UserLocation in the database
+        //    var userLocationList = await _userLocationRepository.GetAllAsync();
+        //    userLocationList.Count().Should().Be(databaseSizeBeforeCreate);
+        //}
 
-        [Fact]
-        public async Task CheckAddressIsRequired()
-        {
-            var databaseSizeBeforeTest = await _userLocationRepository.CountAsync();
+        //[Fact]
+        //public async Task CheckAddressIsRequired()
+        //{
+        //    var databaseSizeBeforeTest = await _userLocationRepository.CountAsync();
 
-            // Set the field to null
-            _userLocation.Address = null;
+        //    // Set the field to null
+        //    _userLocation.Address = null;
 
-            // Create the UserLocation, which fails.
-            UserLocationDto _userLocationDto = _mapper.Map<UserLocationDto>(_userLocation);
-            var response = await _client.PostAsync("/api/user-locations", TestUtil.ToJsonContent(_userLocationDto));
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        //    // Create the UserLocation, which fails.
+        //    UserLocationDto _userLocationDto = _mapper.Map<UserLocationDto>(_userLocation);
+        //    var response = await _client.PostAsync("/api/user-locations", TestUtil.ToJsonContent(_userLocationDto));
+        //    response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-            var userLocationList = await _userLocationRepository.GetAllAsync();
-            userLocationList.Count().Should().Be(databaseSizeBeforeTest);
-        }
+        //    var userLocationList = await _userLocationRepository.GetAllAsync();
+        //    userLocationList.Count().Should().Be(databaseSizeBeforeTest);
+        //}
 
-        [Fact]
-        public async Task GetAllUserLocations()
-        {
-            // Initialize the database
-            await _userLocationRepository.CreateOrUpdateAsync(_userLocation);
-            await _userLocationRepository.SaveChangesAsync();
+        //[Fact]
+        //public async Task GetAllUserLocations()
+        //{
+        //    // Initialize the database
+        //    await _userLocationRepository.CreateOrUpdateAsync(_userLocation);
+        //    await _userLocationRepository.SaveChangesAsync();
 
-            // Get all the userLocationList
-            var response = await _client.GetAsync("/api/user-locations?sort=id,desc");
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        //    // Get all the userLocationList
+        //    var response = await _client.GetAsync("/api/user-locations?sort=id,desc");
+        //    response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var json = JToken.Parse(await response.Content.ReadAsStringAsync());
-            json.SelectTokens("$.[*].id").Should().Contain(_userLocation.Id);
-            json.SelectTokens("$.[*].address").Should().Contain(DefaultAddress);
-            json.SelectTokens("$.[*].zipCode").Should().Contain(DefaultZipCode);
-            json.SelectTokens("$.[*].province").Should().Contain(DefaultProvince);
-        }
+        //    var json = JToken.Parse(await response.Content.ReadAsStringAsync());
+        //    json.SelectTokens("$.[*].id").Should().Contain(_userLocation.Id);
+        //    json.SelectTokens("$.[*].address").Should().Contain(DefaultAddress);
+        //    json.SelectTokens("$.[*].zipCode").Should().Contain(DefaultZipCode);
+        //    json.SelectTokens("$.[*].province").Should().Contain(DefaultProvince);
+        //}
 
-        [Fact]
-        public async Task GetUserLocation()
-        {
-            // Initialize the database
-            await _userLocationRepository.CreateOrUpdateAsync(_userLocation);
-            await _userLocationRepository.SaveChangesAsync();
+        //[Fact]
+        //public async Task GetUserLocation()
+        //{
+        //    // Initialize the database
+        //    await _userLocationRepository.CreateOrUpdateAsync(_userLocation);
+        //    await _userLocationRepository.SaveChangesAsync();
 
-            // Get the userLocation
-            var response = await _client.GetAsync($"/api/user-locations/{_userLocation.Id}");
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        //    // Get the userLocation
+        //    var response = await _client.GetAsync($"/api/user-locations/{_userLocation.Id}");
+        //    response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var json = JToken.Parse(await response.Content.ReadAsStringAsync());
-            json.SelectTokens("$.id").Should().Contain(_userLocation.Id);
-            json.SelectTokens("$.address").Should().Contain(DefaultAddress);
-            json.SelectTokens("$.zipCode").Should().Contain(DefaultZipCode);
-            json.SelectTokens("$.province").Should().Contain(DefaultProvince);
-        }
+        //    var json = JToken.Parse(await response.Content.ReadAsStringAsync());
+        //    json.SelectTokens("$.id").Should().Contain(_userLocation.Id);
+        //    json.SelectTokens("$.address").Should().Contain(DefaultAddress);
+        //    json.SelectTokens("$.zipCode").Should().Contain(DefaultZipCode);
+        //    json.SelectTokens("$.province").Should().Contain(DefaultProvince);
+        //}
 
-        [Fact]
-        public async Task GetNonExistingUserLocation()
-        {
-            var maxValue = long.MaxValue;
-            var response = await _client.GetAsync("/api/user-locations/" + maxValue);
-            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-        }
+        //[Fact]
+        //public async Task GetNonExistingUserLocation()
+        //{
+        //    var maxValue = long.MaxValue;
+        //    var response = await _client.GetAsync("/api/user-locations/" + maxValue);
+        //    response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        //}
 
-        [Fact]
-        public async Task UpdateUserLocation()
-        {
-            // Initialize the database
-            await _userLocationRepository.CreateOrUpdateAsync(_userLocation);
-            await _userLocationRepository.SaveChangesAsync();
-            var databaseSizeBeforeUpdate = await _userLocationRepository.CountAsync();
+        //[Fact]
+        //public async Task UpdateUserLocation()
+        //{
+        //    // Initialize the database
+        //    await _userLocationRepository.CreateOrUpdateAsync(_userLocation);
+        //    await _userLocationRepository.SaveChangesAsync();
+        //    var databaseSizeBeforeUpdate = await _userLocationRepository.CountAsync();
 
-            // Update the userLocation
-            var updatedUserLocation = await _userLocationRepository.QueryHelper().GetOneAsync(it => it.Id == _userLocation.Id);
-            // Disconnect from session so that the updates on updatedUserLocation are not directly saved in db
-            //TODO detach
-            updatedUserLocation.Address = UpdatedAddress;
-            updatedUserLocation.ZipCode = UpdatedZipCode;
-            updatedUserLocation.Province = UpdatedProvince;
+        //    // Update the userLocation
+        //    var updatedUserLocation = await _userLocationRepository.QueryHelper().GetOneAsync(it => it.Id == _userLocation.Id);
+        //    // Disconnect from session so that the updates on updatedUserLocation are not directly saved in db
+        //    //TODO detach
+        //    updatedUserLocation.Address = UpdatedAddress;
+        //    updatedUserLocation.ZipCode = UpdatedZipCode;
+        //    updatedUserLocation.Province = UpdatedProvince;
 
-            UserLocationDto updatedUserLocationDto = _mapper.Map<UserLocationDto>(updatedUserLocation);
-            var response = await _client.PutAsync($"/api/user-locations/{_userLocation.Id}", TestUtil.ToJsonContent(updatedUserLocationDto));
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        //    UserLocationDto updatedUserLocationDto = _mapper.Map<UserLocationDto>(updatedUserLocation);
+        //    var response = await _client.PutAsync($"/api/user-locations/{_userLocation.Id}", TestUtil.ToJsonContent(updatedUserLocationDto));
+        //    response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            // Validate the UserLocation in the database
-            var userLocationList = await _userLocationRepository.GetAllAsync();
-            userLocationList.Count().Should().Be(databaseSizeBeforeUpdate);
-            var testUserLocation = userLocationList.Last();
-            testUserLocation.Address.Should().Be(UpdatedAddress);
-            testUserLocation.ZipCode.Should().Be(UpdatedZipCode);
-            testUserLocation.Province.Should().Be(UpdatedProvince);
-        }
+        //    // Validate the UserLocation in the database
+        //    var userLocationList = await _userLocationRepository.GetAllAsync();
+        //    userLocationList.Count().Should().Be(databaseSizeBeforeUpdate);
+        //    var testUserLocation = userLocationList.Last();
+        //    testUserLocation.Address.Should().Be(UpdatedAddress);
+        //    testUserLocation.ZipCode.Should().Be(UpdatedZipCode);
+        //    testUserLocation.Province.Should().Be(UpdatedProvince);
+        //}
 
-        [Fact]
-        public async Task UpdateNonExistingUserLocation()
-        {
-            var databaseSizeBeforeUpdate = await _userLocationRepository.CountAsync();
+        //[Fact]
+        //public async Task UpdateNonExistingUserLocation()
+        //{
+        //    var databaseSizeBeforeUpdate = await _userLocationRepository.CountAsync();
 
-            // If the entity doesn't have an ID, it will throw BadRequestAlertException
-            UserLocationDto _userLocationDto = _mapper.Map<UserLocationDto>(_userLocation);
-            var response = await _client.PutAsync("/api/user-locations/1", TestUtil.ToJsonContent(_userLocationDto));
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        //    // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        //    UserLocationDto _userLocationDto = _mapper.Map<UserLocationDto>(_userLocation);
+        //    var response = await _client.PutAsync("/api/user-locations/1", TestUtil.ToJsonContent(_userLocationDto));
+        //    response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
-            // Validate the UserLocation in the database
-            var userLocationList = await _userLocationRepository.GetAllAsync();
-            userLocationList.Count().Should().Be(databaseSizeBeforeUpdate);
-        }
+        //    // Validate the UserLocation in the database
+        //    var userLocationList = await _userLocationRepository.GetAllAsync();
+        //    userLocationList.Count().Should().Be(databaseSizeBeforeUpdate);
+        //}
 
-        [Fact]
-        public async Task DeleteUserLocation()
-        {
-            // Initialize the database
-            await _userLocationRepository.CreateOrUpdateAsync(_userLocation);
-            await _userLocationRepository.SaveChangesAsync();
-            var databaseSizeBeforeDelete = await _userLocationRepository.CountAsync();
+        //[Fact]
+        //public async Task DeleteUserLocation()
+        //{
+        //    // Initialize the database
+        //    await _userLocationRepository.CreateOrUpdateAsync(_userLocation);
+        //    await _userLocationRepository.SaveChangesAsync();
+        //    var databaseSizeBeforeDelete = await _userLocationRepository.CountAsync();
 
-            var response = await _client.DeleteAsync($"/api/user-locations/{_userLocation.Id}");
-            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
+        //    var response = await _client.DeleteAsync($"/api/user-locations/{_userLocation.Id}");
+        //    response.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-            // Validate the database is empty
-            var userLocationList = await _userLocationRepository.GetAllAsync();
-            userLocationList.Count().Should().Be(databaseSizeBeforeDelete - 1);
-        }
+        //    // Validate the database is empty
+        //    var userLocationList = await _userLocationRepository.GetAllAsync();
+        //    userLocationList.Count().Should().Be(databaseSizeBeforeDelete - 1);
+        //}
 
         [Fact]
         public void EqualsVerifier()

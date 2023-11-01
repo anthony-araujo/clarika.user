@@ -25,8 +25,6 @@ public class CountryService : ICountryService
     public virtual async Task<IPage<Country>> FindAll(IPageable pageable)
     {
         return await _countryRepository.GetPageAsync(pageable);
-        //var page = await /*_countryRepository*/.GetAllAsync();
-        //return page;
     }
 
     public virtual async Task<Country> FindOne(long id)

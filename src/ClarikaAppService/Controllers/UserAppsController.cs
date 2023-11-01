@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace ClarikaAppService.Controllers
 {
@@ -92,5 +93,25 @@ namespace ClarikaAppService.Controllers
             await _userAppService.Delete(id);
             return NoContent().WithHeaders(HeaderUtil.CreateEntityDeletionAlert(EntityName, id.ToString()));
         }
+
+        [HttpPost("bulk-create")]
+        public async Task<IActionResult> CreateMultipleUserApps([FromBody] List<UserAppDto> userApps)
+        {
+            _log.LogDebug($"REST request to create multiple UserApps: {userApps.Count} users");
+
+            try
+            {
+                var userAppEntities = userApps.Select(dto => _mapper.Map<UserApp>(dto));
+                await _userAppService.SaveAll(userAppEntities);
+
+                return Ok("Users created successfully");
+            }
+            catch (Exception ex)
+            {
+                _log.LogError($"Error creating multiple UserApps: {ex.Message}");
+                return BadRequest("Error creating multiple UserApps");
+            }
+        }
+
     }
 }

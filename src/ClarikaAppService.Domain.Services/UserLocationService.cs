@@ -4,6 +4,7 @@ using ClarikaAppService.Domain.Entities;
 using ClarikaAppService.Domain.Services.Interfaces;
 using ClarikaAppService.Domain.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using ClarikaAppService.Infrastructure.Data.Repositories;
 
 namespace ClarikaAppService.Domain.Services;
 
@@ -25,12 +26,13 @@ public class UserLocationService : IUserLocationService
 
     public virtual async Task<IPage<UserLocation>> FindAll(IPageable pageable)
     {
-        var page = await _userLocationRepository.QueryHelper()
-            .Include(userLocation => userLocation.Country)
-            .Include(userLocation => userLocation.LocationType)
-            .Include(userLocation => userLocation.UserApp)
-            .GetPageAsync(pageable);
-        return page;
+        return await _userLocationRepository.GetPageAsync(pageable);
+        //var page = await _userLocationRepository.QueryHelper()
+        //    .Include(userLocation => userLocation.Country)
+        //    .Include(userLocation => userLocation.LocationType)
+        //    .Include(userLocation => userLocation.UserApp)
+        //    .GetPageAsync(pageable);
+        //return page;
     }
 
     public virtual async Task<UserLocation> FindOne(long id)

@@ -3,6 +3,7 @@ using JHipsterNet.Core.Pagination;
 using ClarikaAppService.Domain.Entities;
 using ClarikaAppService.Domain.Services.Interfaces;
 using ClarikaAppService.Domain.Repositories.Interfaces;
+using ClarikaAppService.Infrastructure.Data.Repositories;
 
 namespace ClarikaAppService.Domain.Services;
 
@@ -24,9 +25,10 @@ public class LocationTypeService : ILocationTypeService
 
     public virtual async Task<IPage<LocationType>> FindAll(IPageable pageable)
     {
-        var page = await _locationTypeRepository.QueryHelper()
-            .GetPageAsync(pageable);
-        return page;
+        return await _locationTypeRepository.GetPageAsync(pageable);
+        //var page = await _locationTypeRepository.QueryHelper()
+        //    .GetPageAsync(pageable);
+        //return page;
     }
 
     public virtual async Task<LocationType> FindOne(long id)
