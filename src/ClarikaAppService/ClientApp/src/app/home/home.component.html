@@ -4,37 +4,37 @@
   </div>
 
   <div class="col-md-9">
-    <h1 class="display-4">
-      <span jhiTranslate="home.title">Welcome,</span> (Clarika App
-      Service)
-    </h1>
+      <h1 class="display-4">
+          <span jhiTranslate="home.title">Welcome,</span>
+      </h1>
 
-    <p class="lead" jhiTranslate="home.subtitle">This is your homepage</p>
+      <p class="lead">This is your homepage, You can access with this credentials.</p>
+      <p class="lead">user@demo.com</p>
+      <p class="lead">U$er@Pass!</p>
 
-    <div [ngSwitch]="account !== null">
-      <div class="alert alert-success" *ngSwitchCase="true">
-        <span
-          id="home-logged-message"
-          *ngIf="account"
-          jhiTranslate="home.logged.message"
-          [translateValues]="{ username: account.login }"
-          >You are logged in as user "{{ account.login }}".</span
-        >
+      <div [ngSwitch]="account !== null">
+          <div class="alert alert-success" *ngSwitchCase="true">
+              <span id="home-logged-message"
+                    *ngIf="account"
+                    jhiTranslate="home.logged.message"
+                    [translateValues]="{ username: account.login }">You are logged in as user "{{ account.login }}".</span>
+          </div>
       </div>
-    </div>
 
 
-    <p>
-      <span jhiTranslate="home.like"
-        ></span
-      >
-      <a
-        href="https://github.com/anthony-araujo/clarika.user"
-        target="_blank"
-        rel="noopener noreferrer"
-        jhiTranslate="home.github"
-        >GitHub</a
-      >!
-    </p>
+      <p>
+          <span jhiTranslate="home.like"></span>
+          <a href="https://github.com/anthony-araujo/clarika.user"
+             target="_blank"
+             rel="noopener noreferrer"
+             jhiTranslate="home.github">GitHub</a>!
+
+
+      </p>
+      <p>
+          <a href="https://anthony-araujo.azurewebsites.net/"
+             target="_blank"
+             rel="noopener noreferrer">Online demo on Azure</a>
+      </p>
   </div>
 </div>

@@ -43,7 +43,7 @@ namespace ClarikaAppService.Infrastructure.Data.Repositories
         public virtual TEntity Update(TEntity entity)
         {
             // Dapper: Use Dapper's Update method to update the entity.
-            var updateSql = $"UPDATE {typeof(TEntity).Name} SET /* specify the update fields and parameters */ WHERE Id = @Id";
+            var updateSql = $"UPDATE {GetTableName<TEntity>()} SET /* specify the update fields and parameters */ WHERE Id = @Id";
             _dbConnection.Execute(updateSql, entity);
             return entity;
         }
@@ -51,7 +51,7 @@ namespace ClarikaAppService.Infrastructure.Data.Repositories
         public virtual TEntity Update(string id, TEntity entity)
         {
             // Dapper: Use Dapper's Update method to update the entity.
-            var updateSql = $"UPDATE {typeof(TEntity).Name} SET /* specify the update fields and parameters */ WHERE Id = @Id";
+            var updateSql = $"UPDATE {GetTableName<TEntity>()} SET /* specify the update fields and parameters */ WHERE Id = @Id";
             _dbConnection.Execute(updateSql, entity);
             return entity;
         }
@@ -76,7 +76,7 @@ namespace ClarikaAppService.Infrastructure.Data.Repositories
             else
             {
                 // Perform an insert operation using Dapper
-                var insertSql = $"INSERT INTO {typeof(TEntity).Name} (/* specify columns */) VALUES (/* specify values */); SELECT SCOPE_IDENTITY()";
+                var insertSql = $"INSERT INTO {GetTableName<TEntity>()} (/* specify columns */) VALUES (/* specify values */); SELECT SCOPE_IDENTITY()";
                 entity.Id = await _dbConnection.ExecuteScalarAsync<TKey>(insertSql, entity);
             }
             return entity;
@@ -93,7 +93,7 @@ namespace ClarikaAppService.Infrastructure.Data.Repositories
             else
             {
                 // Perform an insert operation using Dapper
-                var insertSql = $"INSERT INTO {typeof(TEntity).Name} (/* specify columns */) VALUES (/* specify values */); SELECT SCOPE_IDENTITY()";
+                var insertSql = $"INSERT INTO {GetTableName<TEntity>()} (/* specify columns */) VALUES (/* specify values */); SELECT SCOPE_IDENTITY()";
                 entity.Id = await _dbConnection.ExecuteScalarAsync<TKey>(insertSql, entity);
             }
             return entity;
@@ -107,7 +107,7 @@ namespace ClarikaAppService.Infrastructure.Data.Repositories
         public virtual async Task DeleteByIdAsync(TKey id)
         {
             // Dapper: Use Dapper to delete the entity by ID.
-            var deleteSql = $"DELETE FROM {typeof(TEntity).Name} WHERE Id = @Id";
+            var deleteSql = $"DELETE FROM {GetTableName<TEntity>()} WHERE Id = @Id";
             _dbConnection.Execute(deleteSql, new { Id = id });
         }
 
@@ -128,6 +128,25 @@ namespace ClarikaAppService.Infrastructure.Data.Repositories
             // Dapper: Remove many-to-many relationships using DELETE statements.
             var deleteSql = $"DELETE FROM {joinEntityName} WHERE {ownerIdKey} = @OwnerEntityId AND {ownedIdKey} NOT IN @IdsToIgnore";
             _dbConnection.Execute(deleteSql, new { OwnerEntityId = ownerEntityId, IdsToIgnore = idsToIgnore });
+        }
+
+        private string GetTableName<T>()
+        {
+            // Implementa la lógica para obtener el nombre de la tabla de manera segura
+            // Esto puede variar dependiendo de cómo estés configurando tus entidades con Dapper.
+            // Asegúrate de que este método retorne el nombre de la tabla correspondiente a la entidad.
+            var table = typeof(T).Name;
+            if (table.ToLower() == "locationtype")
+            {
+                table = "location_type";
+            }
+            if (table.ToLower() == "userlocation")
+            {
+                table = "user_location";
+            }
+
+            return table;
+
         }
     }
 }

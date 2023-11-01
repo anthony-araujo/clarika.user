@@ -20,7 +20,7 @@ public class UserLocationService : IUserLocationService
     public virtual async Task<UserLocation> Save(UserLocation userLocation)
     {
         await _userLocationRepository.CreateOrUpdateAsync(userLocation);
-        await _userLocationRepository.SaveChangesAsync();
+        //await _userLocationRepository.SaveChangesAsync();
         return userLocation;
     }
 
@@ -37,17 +37,13 @@ public class UserLocationService : IUserLocationService
 
     public virtual async Task<UserLocation> FindOne(long id)
     {
-        var result = await _userLocationRepository.QueryHelper()
-            .Include(userLocation => userLocation.Country)
-            .Include(userLocation => userLocation.LocationType)
-            .Include(userLocation => userLocation.UserApp)
-            .GetOneAsync(userLocation => userLocation.Id == id);
+        var result = await _userLocationRepository.GetOneAsync(id);
         return result;
     }
 
     public virtual async Task Delete(long id)
     {
         await _userLocationRepository.DeleteByIdAsync(id);
-        await _userLocationRepository.SaveChangesAsync();
+        //await _userLocationRepository.SaveChangesAsync();
     }
 }

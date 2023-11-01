@@ -92,7 +92,18 @@ namespace ClarikaAppService.Infrastructure.Data.Repositories
             // Implementa la lógica para obtener el nombre de la tabla de manera segura
             // Esto puede variar dependiendo de cómo estés configurando tus entidades con Dapper.
             // Asegúrate de que este método retorne el nombre de la tabla correspondiente a la entidad.
-            return typeof(T).Name;
+            var table = typeof(T).Name;
+            if (table.ToLower() == "locationtype")
+            {
+                table = "location_type"; 
+            }
+            if (table.ToLower() == "userlocation")
+            {
+                table = "user_location";
+            }
+
+            return table;
+
         }
 
         private string BuildWhereClause(Expression<Func<TEntity, bool>> predicate)

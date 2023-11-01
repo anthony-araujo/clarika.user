@@ -8,6 +8,7 @@ using ClarikaAppService.Domain.Entities;
 using ClarikaAppService.Domain.Repositories.Interfaces;
 using ClarikaAppService.Infrastructure.Data.Extensions;
 using System.Data;
+using Dapper;
 
 namespace ClarikaAppService.Infrastructure.Data.Repositories
 {
@@ -23,8 +24,42 @@ namespace ClarikaAppService.Infrastructure.Data.Repositories
 
         public override async Task<UserLocation> CreateOrUpdateAsync(UserLocation userLocation)
         {
-            List<Type> entitiesToBeUpdated = new List<Type>();
-            return await base.CreateOrUpdateAsync(userLocation, entitiesToBeUpdated);
+            bool exists = await Exists(userLocation);
+            if (!exists)
+            {
+                    // Insert a new UserLocation
+                    var insertQuery = @"
+                INSERT INTO [dbo].[user_location]
+                ([Address]
+                 ,[ZipCode]
+                 ,[Province]
+                 ,[CountryId]
+                 ,[LocationTypeId]
+                 ,[UserAppId])
+                VALUES
+                (@Address, @ZipCode, @Province, @CountryId, @LocationTypeId, @UserAppId);
+                SELECT SCOPE_IDENTITY()";
+
+                    // Execute the insert query and retrieve the new Id
+                    userLocation.Id = await _dbConnection.ExecuteScalarAsync<long>(insertQuery, userLocation);
+            }
+            else
+            {
+                    // Update an existing UserLocation
+                    var updateQuery = @"
+                UPDATE [dbo].[user_location]
+                SET [Address] = @Address,
+                    [ZipCode] = @ZipCode,
+                    [Province] = @Province,
+                    [CountryId] = @CountryId,
+                    [LocationTypeId] = @LocationTypeId,
+                    [UserAppId] = @UserAppId
+                WHERE [Id] = @Id";
+
+                    // Execute the update query
+                    await _dbConnection.ExecuteAsync(updateQuery, userLocation);
+            }
+            return userLocation;
         }
     }
 }
